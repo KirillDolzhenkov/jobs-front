@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useCompaniesQuery } from '@/entities/company/lib/use-companies-query';
 import { Card, CardContent, Typography, Box, CircularProgress, TextField } from '@mui/material';
@@ -11,7 +11,7 @@ export function CompanyList() {
 
     const filteredCompanies = companies?.filter((company) =>
         company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        company.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (company.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     if (isLoading) {
@@ -51,7 +51,7 @@ export function CompanyList() {
                                     {company.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" className={styles.location}>
-                                    {company.description.split('.')[0]} {/* Имитация локации */}
+                                    {company.description?.split('.')[0] || 'No location'}
                                 </Typography>
                             </Box>
                             <Box className={styles.tags}>

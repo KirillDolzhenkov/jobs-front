@@ -1,5 +1,5 @@
-import { CompanyList } from '@/entities/company/ui/company-list';
-import { Typography, Box, Button } from '@mui/material';
+import {CompanyList} from '@/entities/company/ui/company-list';
+import {Typography, Box, Button} from '@mui/material';
 import styles from './page.module.css';
 
 export default function HomePage() {
@@ -13,16 +13,12 @@ export default function HomePage() {
                     Discover top-tier remote tech companies from leading industries worldwide.
                 </Typography>
                 <Box style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={styles.postJobButton}
-                    >
+                    <Button variant="contained" color="primary" className={styles.postJobButton}>
                         Post a job
                     </Button>
                 </Box>
             </Box>
-            <CompanyList />
+            <CompanyList/>
         </main>
     );
 }
