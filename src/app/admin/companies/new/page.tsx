@@ -3,7 +3,8 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
-import { Container, Typography, TextField, Button } from '@mui/material';
+import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { useCreateCompany } from '@/features/admin/lib/use-create-job';
 
 const NewCompanyPage: NextPage = () => {
     const router = useRouter();
@@ -12,12 +13,26 @@ const NewCompanyPage: NextPage = () => {
     const [slug, setSlug] = React.useState('');
     const [logoUrl, setLogoUrl] = React.useState('');
 
-    const handleSubmit = () => {
-        const newCompany = { id: String(Date.now()), name, description, slug, logoUrl };
-        const mockCompanies = JSON.parse(localStorage.getItem('mockCompanies') || '[]');
-        mockCompanies.push(newCompany);
-        localStorage.setItem('mockCompanies', JSON.stringify(mockCompanies));
-        router.push('/admin/companies');
+    const createCompanyMutation = useCreateCompany();
+
+    const handleSubmit = async () => {
+        if (!name || !slug) {
+            alert('Name and Slug are required');
+            return;
+        }
+
+        try {
+            await createCompanyMutation.mutateAsync({
+                name,
+                description,
+                slug,
+                logoUrl,
+            });
+            router.push('/admin/companies');
+        } catch (error) {
+            console.error('Error creating company:', error);
+            alert('Error creating company');
+        }
     };
 
     return (
@@ -26,11 +41,12 @@ const NewCompanyPage: NextPage = () => {
                 Create New Company
             </Typography>
             <TextField
-                label="Name"
+                label="Name *"
                 fullWidth
                 margin="normal"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
             />
             <TextField
                 label="Description"
@@ -42,11 +58,12 @@ const NewCompanyPage: NextPage = () => {
                 onChange={(e) => setDescription(e.target.value)}
             />
             <TextField
-                label="Slug"
+                label="Slug *"
                 fullWidth
                 margin="normal"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
+                required
             />
             <TextField
                 label="Logo URL"
@@ -55,14 +72,22 @@ const NewCompanyPage: NextPage = () => {
                 value={logoUrl}
                 onChange={(e) => setLogoUrl(e.target.value)}
             />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                sx={{ mt: 2 }}
-            >
-                Create Company
-            </Button>
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                    disabled={createCompanyMutation.isPending}
+                >
+                    {createCompanyMutation.isPending ? 'Creating...' : 'Create Company'}
+                </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => router.push('/admin/companies')}
+                >
+                    Cancel
+                </Button>
+            </Box>
         </Container>
     );
 };

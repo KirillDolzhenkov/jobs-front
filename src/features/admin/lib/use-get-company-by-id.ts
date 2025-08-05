@@ -1,11 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiSchema } from '@/shared/types/schema';
-import { fetchCompanies } from '@/shared/lib/mock-data';
+import { getCompaniesFromStorage } from '@/shared/lib/mock-data';
 
-export function useGetCompanyById(id: string) {
+export const useGetCompanyById = (id: string) => {
     return useQuery<ApiSchema.Company>({
-        queryKey: ['company', id],
-        queryFn: () => fetchCompanies().then((companies) => companies.find((c) => c.id === id)),
-        enabled: !!id,
+        queryKey: ['companies', id],
+        queryFn: async () => {
+            const companies = getCompaniesFromStorage();
+            const company = companies.find(c => c.id === id);
+            
+            if (!company) {
+                throw new Error(`Company with id ${id} not found`);
+            }
+            
+            return company;
+        },
+        staleTime: Infinity,
     });
-}
+};

@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiSchema } from '@/shared/types/schema';
-import { fetchCompanies } from '@/shared/lib/mock-data';
+import { getCompaniesFromStorage } from '@/shared/lib/mock-data';
 
-export function useGetCompaniesList() {
+export const useGetCompanies = () => {
     return useQuery<ApiSchema.Company[]>({
         queryKey: ['companies'],
-        queryFn: fetchCompanies,
+        queryFn: async () => {
+            return getCompaniesFromStorage();
+        },
+        staleTime: Infinity,
     });
-}
+};

@@ -1,10 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiSchema } from '@/shared/types/schema';
-import { fetchJobs } from '@/shared/lib/mock-data';
+import { updateCompanyInStorage } from '@/shared/lib/mock-data';
 
-export function useGetJobsList() {
-    return useQuery<ApiSchema.Job[]>({
-        queryKey: ['jobs'],
-        queryFn: fetchJobs,
+export const useUpdateCompany = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (updatedCompany: ApiSchema.Company) => {
+            updateCompanyInStorage(updatedCompany);
+            return updatedCompany;
+        },
+        onSuccess: (updatedCompany) => {
+            // Обновляем кеш для конкретной компании
+            queryClient.setQueryData(['companies', updatedCompany.id], updatedCompany);
+            // Инвалидируем общий список компаний
+            queryClient.invalidateQueries({ queryKey: ['companies'] });
+        },
     });
-}
+};

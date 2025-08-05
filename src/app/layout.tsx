@@ -1,16 +1,36 @@
-import {Providers} from './providers';
-import './globals.css';
+'use client';
 
-export const metadata = {
-    title: 'Company App',
-    description: 'A Next.js app for managing companies',
-};
+import { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import theme from '@/shared/theme';
+import { createLocalStorageMiddleware } from '@/features/admin/lib/query-local-storage-middleware';
 
-export default function RootLayout({children}: { children: React.ReactNode }) {
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: Infinity, // Данные считаются актуальными, пока не обновлены
+        },
+    },
+});
+
+const withLocalStorage = createLocalStorageMiddleware(true); // Включено для имитации
+withLocalStorage(queryClient);
+
+const emotionCache = createCache({ key: 'mui' });
+
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="en">
         <body>
-        <Providers>{children}</Providers>
+        <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+            </ThemeProvider>
+        </CacheProvider>
         </body>
         </html>
     );

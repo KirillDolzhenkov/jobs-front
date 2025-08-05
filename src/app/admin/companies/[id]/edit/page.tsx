@@ -1,16 +1,18 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import {useState, useEffect, use} from 'react';
-import { Container, Typography, TextField, Button } from '@mui/material';
+import { useState, useEffect, use } from 'react';
+import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useGetCompanyById } from '@/features/admin/lib/use-get-company-by-id';
+import { useUpdateCompany } from '@/features/admin/lib/use-get-jobs-list';
 import { ApiSchema } from '@/shared/types/schema';
 
-const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
-    const {id} = use(params);
+const EditCompanyPage = ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = use(params);
     const router = useRouter();
 
     const { data: company, isLoading, isError } = useGetCompanyById(id);
+    const updateCompanyMutation = useUpdateCompany();
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -18,34 +20,35 @@ const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
     const [logoUrl, setLogoUrl] = useState('');
 
     useEffect(() => {
-        console.log('Mounting EditCompanyPage, ID:', id);
         if (company) {
             setName(company.name);
             setDescription(company.description || '');
             setSlug(company.slug);
             setLogoUrl(company.logoUrl || '');
-        } else if (id) {
-            const storedCompanies = JSON.parse(localStorage.getItem('mockCompanies') || '[]');
-            const storedCompany = storedCompanies.find((c: ApiSchema.Company) => c.id === id);
-            console.log('Stored companies:', storedCompanies, 'Found:', storedCompany);
-            if (storedCompany) {
-                setName(storedCompany.name);
-                setDescription(storedCompany.description || '');
-                setSlug(storedCompany.slug);
-                setLogoUrl(storedCompany.logoUrl || '');
-            }
         }
-    }, [company, id]);
+    }, [company]);
 
-    const handleSubmit = () => {
-        if (!id) return;
-        const updatedCompany: ApiSchema.Company = { id, name, description, slug, logoUrl };
-        const mockCompanies = JSON.parse(localStorage.getItem('mockCompanies') || '[]');
-        const updatedCompanies = mockCompanies.map((c: ApiSchema.Company) =>
-            c.id === id ? updatedCompany : c
-        );
-        localStorage.setItem('mockCompanies', JSON.stringify(updatedCompanies));
-        router.push('/admin/companies');
+    const handleSubmit = async () => {
+        if (!id || !name || !slug) {
+            alert('Name and Slug are required');
+            return;
+        }
+
+        try {
+            const updatedCompany: ApiSchema.Company = { 
+                id, 
+                name, 
+                description, 
+                slug, 
+                logoUrl 
+            };
+            
+            await updateCompanyMutation.mutateAsync(updatedCompany);
+            router.push('/admin/companies');
+        } catch (error) {
+            console.error('Error updating company:', error);
+            alert('Error updating company');
+        }
     };
 
     if (isLoading) {
@@ -56,7 +59,7 @@ const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
         );
     }
 
-    if (isError || (!company && !JSON.parse(localStorage.getItem('mockCompanies') || '[]').find((c: ApiSchema.Company) => c.id === id))) {
+    if (isError || !company) {
         return (
             <Container>
                 <Typography variant="h5">Company not found</Typography>
@@ -70,11 +73,12 @@ const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
                 Edit Company
             </Typography>
             <TextField
-                label="Name"
+                label="Name *"
                 fullWidth
                 margin="normal"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
             />
             <TextField
                 label="Description"
@@ -86,11 +90,12 @@ const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
                 onChange={(e) => setDescription(e.target.value)}
             />
             <TextField
-                label="Slug"
+                label="Slug *"
                 fullWidth
                 margin="normal"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
+                required
             />
             <TextField
                 label="Logo URL"
@@ -99,14 +104,22 @@ const EditCompanyPage = ({params}: { params: Promise<{ id: string }> }) => {
                 value={logoUrl}
                 onChange={(e) => setLogoUrl(e.target.value)}
             />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                sx={{ mt: 2 }}
-            >
-                Save Changes
-            </Button>
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                    disabled={updateCompanyMutation.isPending}
+                >
+                    {updateCompanyMutation.isPending ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => router.push('/admin/companies')}
+                >
+                    Cancel
+                </Button>
+            </Box>
         </Container>
     );
 };
