@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { Inter }         from 'next/font/google';
+
 import { Providers } from './providers';
+
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Job Platform',
+  title:       'Job Platform',
   description: 'A platform for discovering and managing tech jobs',
 };
 

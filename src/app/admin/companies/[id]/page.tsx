@@ -1,76 +1,112 @@
 'use client';
 
-import {useState, useEffect, use} from 'react';
-import {Container, Typography, Button} from '@mui/material';
-import {useGetCompanyById} from '@/features/admin/lib/use-get-company-by-id';
-import {ApiSchema} from '@/shared/types/schema';
-import {useRouter} from 'next/navigation';
+import CustomButton                         from '@/shared/ui/CustomButton/CustomButton';
+import { NextPage }                         from 'next';
+import { useParams, useRouter }             from 'next/navigation';
+import { Container, Typography, TextField } from '@mui/material';
+import ClientProviders                      from '@/features/admin/components/ClientProviders';
+import { useGetCompanyById }                from '@/features/admin/lib/use-get-company-by-id';
+import { useUpdateCompany }                 from '@/features/admin/lib/use-update-company';
 
+const CompanyEditPage: NextPage = () => {
+  const { id }        = useParams() as {id: string};
+  const router        = useRouter();
+  const {
+          data: company,
+          isLoading,
+          error,
+        }             = useGetCompanyById(id);
+  const updateCompany = useUpdateCompany(company?.id);
 
-const CompanyDetailsPage = ({params}: { params: Promise<{ id: string }> }) => {
-    const {id} = use(params);
-    const router = useRouter();
-
-    const {data: company, isLoading, isError} = useGetCompanyById(id);
-
-    const [companyData, setCompanyData] = useState<ApiSchema.Company | null>(null);
-
-    useEffect(() => {
-        if (company) {
-            setCompanyData(company);
-        } else {
-            const storedCompanies = JSON.parse(localStorage.getItem('mockCompanies') || '[]');
-            const storedCompany = storedCompanies.find((c: ApiSchema.Company) => c.id === id);
-            if (storedCompany) {
-                setCompanyData(storedCompany);
-            }
-        }
-    }, [company, id]);
-
-    const handleEdit = () => {
-        router.push(`/admin/companies/${id}/edit`);
-    };
-
-    if (isLoading) {
-        return (
-            <Container>
-                <Typography variant="h5">Loading...</Typography>
-            </Container>
-        );
-    }
-
-    if (isError || !companyData) {
-        return (
-            <Container>
-                <Typography variant="h5">Company not found</Typography>
-            </Container>
-        );
-    }
-
+  if (isLoading) {
     return (
-        <Container>
-            <Typography variant="h4" gutterBottom>
-                {companyData.name}
-            </Typography>
-            <Typography variant="body1">Slug: {companyData.slug}</Typography>
-            <Typography variant="body1">Description: {companyData.description || 'No description'}</Typography>
-            {companyData.logoUrl && (
-                <img
-                    src={companyData.logoUrl}
-                    alt={`${companyData.name} Logo`}
-                    style={{maxWidth: '200px', marginTop: '16px'}}
-                />
-            )}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleEdit}
-                sx={{mt: 2}}
-            >
-                Edit Company
-            </Button>
-        </Container>
+      <Container>
+        <Typography variant="h5">Loading...</Typography>
+      </Container>
     );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Typography variant="h5">Error loading company: {error.message}</Typography>
+      </Container>
+    );
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData    = new FormData(e.target as HTMLFormElement);
+    const name        = formData.get('name') as string;
+    const description = formData.get('description') as string;
+    const logoUrl     = formData.get('logoUrl') as string;
+
+    updateCompany.mutate(
+      {
+        name,
+        description,
+        logoUrl,
+      },
+      {
+        onSuccess: () => {
+          router.push('/admin/companies');
+        },
+        onError:   (error) => {
+          console.error('Update failed:', error);
+        },
+      },
+    );
+  };
+
+  return (
+    <ClientProviders>
+      <Container>
+        <Typography variant="h4" gutterBottom>
+          Edit Company
+        </Typography>
+        {company && (
+          <form onSubmit={handleSubmit}>
+            <TextField
+              name="name"
+              label="Name"
+              defaultValue={company.name}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              name="description"
+              label="Description"
+              defaultValue={company.description}
+              fullWidth
+              margin="normal"
+              multiline
+            />
+            <TextField
+              name="logoUrl"
+              label="Logo URL"
+              defaultValue={company.logoUrl}
+              fullWidth
+              margin="normal"
+            />
+            <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+              Save
+            </CustomButton>
+            <CustomButton
+              variant="outlined"
+              onClick={() => router.push('/admin/companies')}
+              sx={{
+                mt: 2,
+                ml: 2,
+              }}
+            >
+              Cancel
+            </CustomButton>
+          </form>
+        )}
+      </Container>
+    </ClientProviders>
+  );
 };
 
-export default CompanyDetailsPage;
+export default CompanyEditPage;

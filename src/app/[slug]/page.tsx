@@ -1,14 +1,20 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useGetJobBySlug } from '@/features/public/lib/use-get-job-by-slug';
-import { Box, Typography, CircularProgress, Button } from '@mui/material';
-import Link from 'next/link';
+import { useGetJobBySlug }                   from '@/features/public/lib/use-get-job-by-slug';
+import CustomButton                          from '@/shared/ui/CustomButton/CustomButton';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import Link                                  from 'next/link';
+import { useParams }                         from 'next/navigation';
+
 import styles from './job-detail.module.css';
 
 export default function JobDetailPage() {
   const { slug } = useParams();
-  const { data: job, isLoading, error } = useGetJobBySlug(slug as string);
+  const {
+          data: job,
+          isLoading,
+          error,
+        }        = useGetJobBySlug(slug as string);
 
   if (isLoading) {
     return (
@@ -28,9 +34,9 @@ export default function JobDetailPage() {
           {error.message}
         </Typography>
         <Link href="/">
-          <Button variant="outlined" sx={{ mt: 2 }}>
+          <CustomButton variant="outlined" sx={{ mt: 2 }}>
             Back to Jobs
-          </Button>
+          </CustomButton>
         </Link>
       </Box>
     );
@@ -41,9 +47,9 @@ export default function JobDetailPage() {
       <Box>
         <Typography color="error" className={styles.errorText}>Job not found</Typography>
         <Link href="/">
-          <Button variant="outlined" sx={{ mt: 2 }}>
+          <CustomButton variant="outlined" sx={{ mt: 2 }}>
             Back to Jobs
-          </Button>
+          </CustomButton>
         </Link>
       </Box>
     );
@@ -69,14 +75,16 @@ export default function JobDetailPage() {
       <Typography variant="body2" className={styles.jobDetails}>
         Expires: {new Date(job.expireAt).toLocaleDateString()}
       </Typography>
-      <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className={styles.applyButton}>
-        Apply Now
-      </a>
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 4 }}>
+        <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className={styles.applyButton}>
+          Apply Now
+        </a>
+      </Box>
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'end' }}>
         <Link href="/">
-          <Button variant="outlined">
+          <CustomButton variant="outlined" >
             Back
-          </Button>
+          </CustomButton>
         </Link>
       </Box>
     </Box>

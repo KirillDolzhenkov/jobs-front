@@ -1,0 +1,34 @@
+/* Стили для variant="contained" (аналог Post a Job) */
+.contained {
+  background-color: #2d3748 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+}
+
+.contained:hover {
+  background-color: #1d2836 !important;
+  box-shadow: none !important;
+}
+
+/* Стили для variant="outlined" (черные тона) */
+.outlined {
+  border-color: #2d3748 !important;
+  color: #2d3748 !important;
+}
+
+.outlined:hover {
+  border-color: #1d2836 !important;
+  background-color: rgba(45, 55, 72, 0.04) !important;
+  color: #1d2836 !important;
+}
+
+/* Стили для variant="text" (черные тона) */
+.text {
+  color: #2d3748 !important;
+}
+
+.text:hover {
+  color: #1d2836 !important;
+  background-color: rgba(45, 55, 72, 0.04) !important;
+}

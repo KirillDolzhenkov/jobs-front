@@ -1,20 +1,44 @@
 'use client';
 
-import { NextPage } from 'next';
-import { useState } from 'react';
-import { Container, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow, Pagination } from '@mui/material';
+import CustomButton  from '@/shared/ui/CustomButton/CustomButton';
+import { NextPage }  from 'next';
+import { useState }  from 'react';
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Pagination,
+}                    from '@mui/material';
 import { useRouter } from 'next/navigation';
-import ClientProviders from '@/features/admin/components/ClientProviders';
-import { useGetJobs } from '@/features/admin/lib/use-get-jobs';
-import { PublishButton } from '@/features/admin/components/PublishButton';
-import { ArchiveButton } from '@/features/admin/components/ArchiveButton';
-import { ExtendButton } from '@/features/admin/components/ExtendButton';
+import ClientProviders
+                     from '@/features/admin/components/ClientProviders';
+import {
+  useGetJobs,
+}                    from '@/features/admin/lib/use-get-jobs';
+import {
+  PublishButton,
+}                    from '@/features/admin/components/PublishButton';
+import {
+  ArchiveButton,
+}                    from '@/features/admin/components/ArchiveButton';
+import {
+  ExtendButton,
+}                    from '@/features/admin/components/ExtendButton';
 
 const JobsPage: NextPage = () => {
-  const router = useRouter();
+  const router          = useRouter();
   const [page, setPage] = useState(1);
-  const limit = 10;
-  const { data, isLoading, error } = useGetJobs(page, limit);
+  const limit           = 10;
+
+  const {
+    data,
+    isLoading,
+    error,
+  }   = useGetJobs(page, limit);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -36,7 +60,7 @@ const JobsPage: NextPage = () => {
     );
   }
 
-  const jobs = data?.data || [];
+  const jobs       = data?.data || [];
   const totalPages = data?.meta ? Math.ceil(data.meta.total / limit) : 1;
 
   return (
@@ -45,15 +69,21 @@ const JobsPage: NextPage = () => {
         <Typography variant="h4" gutterBottom>
           Jobs
         </Typography>
-        <Button variant="contained" color="primary" onClick={() => router.push('/admin/jobs/new')} sx={{ mb: 2 }}>
+        <CustomButton variant="contained" onClick={() => router.push('/admin/jobs/new')} sx={{ mb: 2 }}>
           Create New Job
-        </Button>
+        </CustomButton>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Slug</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>
+                <Typography variant="h6">Title</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Slug</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Actions</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -67,15 +97,15 @@ const JobsPage: NextPage = () => {
                   <TableCell>{job.title}</TableCell>
                   <TableCell>{job.slug}</TableCell>
                   <TableCell>
-                    <Button
+                    <CustomButton
                       variant="outlined"
                       size="small"
-                      onClick={() => router.push(`/admin/jobs/${job.id}`)}
+                      onClick={() => router.push(`/admin/jobs/${job.slug}`)}
                       sx={{ mr: 1 }}
                     >
                       Edit
-                    </Button>
-                    <PublishButton jobId={job.id} />
+                    </CustomButton>
+                    <PublishButton jobId={job.id} sx={{ ml: 1 }} />
                     <ArchiveButton jobId={job.id} sx={{ ml: 1 }} />
                     <ExtendButton jobId={job.id} sx={{ ml: 1 }} />
                   </TableCell>
@@ -89,7 +119,11 @@ const JobsPage: NextPage = () => {
             count={totalPages}
             page={page}
             onChange={handlePageChange}
-            sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
+            sx={{
+              mt:             2,
+              display:        'flex',
+              justifyContent: 'center',
+            }}
           />
         )}
       </Container>

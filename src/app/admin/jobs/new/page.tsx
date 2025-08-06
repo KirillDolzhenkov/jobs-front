@@ -1,38 +1,46 @@
 'use client';
 
-import { NextPage } from 'next';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Button, MenuItem } from '@mui/material';
-import ClientProviders from '@/features/admin/components/ClientProviders';
-import { useGetCompanies } from '@/features/admin/lib/use-get-companies';
-import { useCreateJob } from '@/features/admin/lib/use-create-job';
+import CustomButton                                   from '@/shared/ui/CustomButton/CustomButton';
+import { NextPage }                                   from 'next';
+import { useRouter }                                  from 'next/navigation';
+import { useState, useEffect }                        from 'react';
+import { Container, Typography, TextField, MenuItem } from '@mui/material';
+import ClientProviders                                from '@/features/admin/components/ClientProviders';
+import { useGetCompanies }                            from '@/features/admin/lib/use-get-companies';
+import { useCreateJob }                               from '@/features/admin/lib/use-create-job';
 
 const JobNewPage: NextPage = () => {
-  const router = useRouter();
-  const { data: companiesData, isLoading: isCompaniesLoading } = useGetCompanies(1, 10);
+  const router    = useRouter();
+  const {
+          data:      companiesData,
+          isLoading: isCompaniesLoading,
+        }         = useGetCompanies(1, 10);
   const createJob = useCreateJob();
 
   const [formData, setFormData] = useState({
-    title: '',
+    title:       '',
     description: '',
-    location: '',
-    slug: '',
-    expireAt: '',
-    companyId: '',
-    tagIds: [] as string[],
+    location:    '',
+    slug:        '',
+    expireAt:    '',
+    companyId:   '',
+    tagIds:      [] as string[],
   });
 
-  useEffect(() => {
+  // deprecated
+  /* useEffect(() => {
     // Генерируем уникальный slug на основе текущей даты
     setFormData((prev) => ({
       ...prev,
       slug: `new-job-${Date.now()}`,
     }));
-  }, []);
+  }, []); */
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -51,10 +59,10 @@ const JobNewPage: NextPage = () => {
         onSuccess: () => {
           router.push('/admin/jobs');
         },
-        onError: (error) => {
+        onError:   (error) => {
           console.error('Create failed:', error);
         },
-      }
+      },
     );
   };
 
@@ -138,16 +146,19 @@ const JobNewPage: NextPage = () => {
               </MenuItem>
             ))}
           </TextField>
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
             Save
-          </Button>
-          <Button
+          </CustomButton>
+          <CustomButton
             variant="outlined"
             onClick={() => router.push('/admin/jobs')}
-            sx={{ mt: 2, ml: 2 }}
+            sx={{
+              mt: 2,
+              ml: 2,
+            }}
           >
             Cancel
-          </Button>
+          </CustomButton>
         </form>
       </Container>
     </ClientProviders>

@@ -1,28 +1,36 @@
 'use client';
 
-import { Button } from '@mui/material';
 import { useArchiveJob } from '@/features/admin/lib/use-archive-job';
+import CustomButton      from '@/shared/ui/CustomButton/CustomButton';
+import { ButtonProps }   from '@mui/material';
 
 interface ArchiveButtonProps {
   jobId: string;
+  sx?: ButtonProps['sx'];
 }
 
-export const ArchiveButton = ({ jobId }: ArchiveButtonProps) => {
-  const archiveJob = useArchiveJob(jobId);
+export const ArchiveButton = ({
+  jobId,
+  sx,
+}: ArchiveButtonProps) => {
+  const {
+          mutate,
+          isPending,
+        } = useArchiveJob(jobId);
 
   const handleArchive = () => {
-    archiveJob.mutate();
+    mutate();
   };
 
   return (
-    <Button
+    <CustomButton
+      sx={sx}
       variant="contained"
       size="small"
       onClick={handleArchive}
-      color="warning"
-      disabled={archiveJob.isLoading}
+      disabled={isPending}
     >
-      {archiveJob.isLoading ? 'Archiving...' : 'Archive'}
-    </Button>
+      {isPending ? 'Archiving...' : 'Archive'}
+    </CustomButton>
   );
 };

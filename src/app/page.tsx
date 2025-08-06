@@ -1,6 +1,7 @@
 'use client';
 
 import { JobList } from '@/features/public/components/JobList';
+import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import { Typography, Box, Button } from '@mui/material';
 import styles from './page.module.css';
 
@@ -15,9 +16,9 @@ export default function JobsPage() {
           Discover top-tier remote tech jobs from leading industries worldwide.
         </Typography>
         <Box style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginTop: '1rem' }}>
-          <Button variant="contained" color="primary" className={styles.postJobButton}>
+          <CustomButton variant="contained">
             Post a Job
-          </Button>
+          </CustomButton>
         </Box>
       </Box>
       <JobList />

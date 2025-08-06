@@ -1,28 +1,29 @@
 'use client';
 
-import { NextPage } from 'next';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Button } from '@mui/material';
-import ClientProviders from '@/features/admin/components/ClientProviders';
+import { Container, TextField, Typography } from '@mui/material';
+import { NextPage }                         from 'next';
+import { useRouter }                        from 'next/navigation';
+import { useState }                         from 'react';
+
+import ClientProviders      from '@/features/admin/components/ClientProviders';
 import { useCreateCompany } from '@/features/admin/lib/use-create-company';
+import CustomButton         from '@/shared/ui/CustomButton/CustomButton';
 
 const CompanyNewPage: NextPage = () => {
-  const router = useRouter();
+  const router        = useRouter();
   const createCompany = useCreateCompany();
 
   const [formData, setFormData] = useState({
-    name: '',
+    name:        '',
     description: '',
-    logoUrl: '',
+    logoUrl:     '',
   });
 
-  useEffect(() => {
-    // Можно добавить генерацию уникального slug, если API требует, но для компаний это опционально
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const {
+            name,
+            value,
+          } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -41,10 +42,10 @@ const CompanyNewPage: NextPage = () => {
         onSuccess: () => {
           router.push('/admin/companies');
         },
-        onError: (error) => {
+        onError:   (error) => {
           console.error('Create failed:', error);
         },
-      }
+      },
     );
   };
 
@@ -81,16 +82,19 @@ const CompanyNewPage: NextPage = () => {
             fullWidth
             margin="normal"
           />
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
             Save
-          </Button>
-          <Button
+          </CustomButton>
+          <CustomButton
             variant="outlined"
             onClick={() => router.push('/admin/companies')}
-            sx={{ mt: 2, ml: 2 }}
+            sx={{
+              mt: 2,
+              ml: 2,
+            }}
           >
             Cancel
-          </Button>
+          </CustomButton>
         </form>
       </Container>
     </ClientProviders>

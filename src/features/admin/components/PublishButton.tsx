@@ -1,30 +1,36 @@
 'use client';
 
-import { Button } from '@mui/material';
 import { usePublishJob } from '@/features/admin/lib/use-publish-job';
-import { useRouter } from 'next/navigation';
+import CustomButton      from '@/shared/ui/CustomButton/CustomButton';
+import { ButtonProps }   from '@mui/material';
 
 interface PublishButtonProps {
   jobId: string;
+  sx?: ButtonProps['sx'];
 }
 
-export const PublishButton = ({ jobId }: PublishButtonProps) => {
-  const router = useRouter();
-  const publishJob = usePublishJob(jobId);
+export const PublishButton = ({
+  jobId,
+  sx,
+}: PublishButtonProps) => {
+  const {
+          mutate,
+          isPending,
+        } = usePublishJob(jobId);
 
   const handlePublish = () => {
-    publishJob.mutate();
+    mutate();
   };
 
   return (
-    <Button
+    <CustomButton
+      sx={sx}
       variant="contained"
       size="small"
       onClick={handlePublish}
-      color="success"
-      disabled={publishJob.isLoading}
+      disabled={isPending}
     >
-      {publishJob.isLoading ? 'Publishing...' : 'Publish'}
-    </Button>
+      {isPending ? 'Publishing...' : 'Publish'}
+    </CustomButton>
   );
 };

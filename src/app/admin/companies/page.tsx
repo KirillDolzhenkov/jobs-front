@@ -1,18 +1,32 @@
 'use client';
 
-import { NextPage } from 'next';
-import { useQuery } from '@tanstack/react-query';
-import { Container, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow, Pagination } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import ClientProviders from '@/features/admin/components/ClientProviders';
+import { useState }        from 'react';
+import { useRouter }       from 'next/navigation';
+import { NextPage }        from 'next';
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Pagination,
+}                          from '@mui/material';
+
+import ClientProviders     from '@/features/admin/components/ClientProviders';
 import { useGetCompanies } from '@/features/admin/lib/use-get-companies';
-import { useState } from 'react';
+import CustomButton        from '@/shared/ui/CustomButton/CustomButton';
 
 const CompaniesPage: NextPage = () => {
-  const router = useRouter();
+  const router          = useRouter();
   const [page, setPage] = useState(1);
-  const limit = 10;
-  const { data, isLoading, error } = useGetCompanies(page, limit);
+  const limit           = 10;
+  const {
+          data,
+          isLoading,
+          error,
+        }               = useGetCompanies(page, limit);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -34,7 +48,7 @@ const CompaniesPage: NextPage = () => {
     );
   }
 
-  const companies = data?.data || [];
+  const companies  = data?.data || [];
   const totalPages = data?.meta ? Math.ceil(data.meta.total / limit) : 1;
 
   return (
@@ -43,15 +57,26 @@ const CompaniesPage: NextPage = () => {
         <Typography variant="h4" gutterBottom>
           Companies
         </Typography>
-        <Button variant="contained" color="primary" onClick={() => router.push('/admin/companies/new')} sx={{ mb: 2 }}>
+        <CustomButton
+          variant="contained"
+          color="primary"
+          onClick={() => router.push('/admin/companies/new')}
+          sx={{ mb: 2 }}
+        >
           Create New Company
-        </Button>
+        </CustomButton>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Slug</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>
+                <Typography variant="h6">Name</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Slug</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Actions</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -65,13 +90,13 @@ const CompaniesPage: NextPage = () => {
                   <TableCell>{company.name}</TableCell>
                   <TableCell>{company.slug}</TableCell>
                   <TableCell>
-                    <Button
+                    <CustomButton
                       variant="outlined"
                       size="small"
-                      onClick={() => router.push(`/admin/companies/${company.id}`)}
+                      onClick={() => router.push(`/admin/companies/${company.slug}`)}
                     >
                       Edit
-                    </Button>
+                    </CustomButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -83,7 +108,11 @@ const CompaniesPage: NextPage = () => {
             count={totalPages}
             page={page}
             onChange={handlePageChange}
-            sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
+            sx={{
+              mt:             2,
+              display:        'flex',
+              justifyContent: 'center',
+            }}
           />
         )}
       </Container>
