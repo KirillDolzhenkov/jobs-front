@@ -1,95 +1,100 @@
 'use client';
 
-import * as React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { useCreateCompany } from '@/features/admin/lib/use-create-job';
+import { useState, useEffect } from 'react';
+import { Container, Typography, TextField, Button } from '@mui/material';
+import ClientProviders from '@/features/admin/components/ClientProviders';
+import { useCreateCompany } from '@/features/admin/lib/use-create-company';
 
-const NewCompanyPage: NextPage = () => {
-    const router = useRouter();
-    const [name, setName] = React.useState('');
-    const [description, setDescription] = React.useState('');
-    const [slug, setSlug] = React.useState('');
-    const [logoUrl, setLogoUrl] = React.useState('');
+const CompanyNewPage: NextPage = () => {
+  const router = useRouter();
+  const createCompany = useCreateCompany();
 
-    const createCompanyMutation = useCreateCompany();
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    logoUrl: '',
+  });
 
-    const handleSubmit = async () => {
-        if (!name || !slug) {
-            alert('Name and Slug are required');
-            return;
-        }
+  useEffect(() => {
+    // Можно добавить генерацию уникального slug, если API требует, но для компаний это опционально
+  }, []);
 
-        try {
-            await createCompanyMutation.mutateAsync({
-                name,
-                description,
-                slug,
-                logoUrl,
-            });
-            router.push('/admin/companies');
-        } catch (error) {
-            console.error('Error creating company:', error);
-            alert('Error creating company');
-        }
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Typography variant="h4" gutterBottom>
-                Create New Company
-            </Typography>
-            <TextField
-                label="Name *"
-                fullWidth
-                margin="normal"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-            />
-            <TextField
-                label="Description"
-                fullWidth
-                margin="normal"
-                multiline
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
-            <TextField
-                label="Slug *"
-                fullWidth
-                margin="normal"
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                required
-            />
-            <TextField
-                label="Logo URL"
-                fullWidth
-                margin="normal"
-                value={logoUrl}
-                onChange={(e) => setLogoUrl(e.target.value)}
-            />
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={createCompanyMutation.isPending}
-                >
-                    {createCompanyMutation.isPending ? 'Creating...' : 'Create Company'}
-                </Button>
-                <Button
-                    variant="outlined"
-                    onClick={() => router.push('/admin/companies')}
-                >
-                    Cancel
-                </Button>
-            </Box>
-        </Container>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name) {
+      console.error('Please fill the name field');
+      return;
+    }
+    createCompany.mutate(
+      formData,
+      {
+        onSuccess: () => {
+          router.push('/admin/companies');
+        },
+        onError: (error) => {
+          console.error('Create failed:', error);
+        },
+      }
     );
+  };
+
+  return (
+    <ClientProviders>
+      <Container>
+        <Typography variant="h4" gutterBottom>
+          Create New Company
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            name="name"
+            label="Name"
+            value={formData.name}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            name="description"
+            label="Description"
+            value={formData.description}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            multiline
+          />
+          <TextField
+            name="logoUrl"
+            label="Logo URL"
+            value={formData.logoUrl}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+            Save
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => router.push('/admin/companies')}
+            sx={{ mt: 2, ml: 2 }}
+          >
+            Cancel
+          </Button>
+        </form>
+      </Container>
+    </ClientProviders>
+  );
 };
 
-export default NewCompanyPage;
+export default CompanyNewPage;

@@ -1,3 +1,4 @@
+/*
 'use client';
 
 import { useCompaniesQuery } from '@/entities/company/lib/use-companies-query';
@@ -68,4 +69,4 @@ export function CompanyList() {
             </Box>
         </Box>
     );
-}
+}*/

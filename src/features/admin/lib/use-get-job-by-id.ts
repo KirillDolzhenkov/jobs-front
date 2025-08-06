@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiSchema } from '@/shared/types/schema';
-import { fetchJobs } from '@/shared/lib/mock-data';
+import { Job } from '@/shared/types/schema';
 
-export function useGetJobById(id: string) {
-    return useQuery<ApiSchema.Job>({
+export const useGetJobById = (id: string) => {
+    return useQuery<Job>({
         queryKey: ['job', id],
-        queryFn: () => fetchJobs().then((jobs) => jobs.find((j) => j.id === id)),
-        enabled: !!id,
+        queryFn: async () => {
+            const response = await fetch(`/api/jobs/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to fetch job');
+            return response.json();
+        },
     });
-}
+};

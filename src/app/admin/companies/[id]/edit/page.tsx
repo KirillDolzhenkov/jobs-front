@@ -4,8 +4,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect, use } from 'react';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useGetCompanyById } from '@/features/admin/lib/use-get-company-by-id';
-import { useUpdateCompany } from '@/features/admin/lib/use-get-jobs-list';
-import { ApiSchema } from '@/shared/types/schema';
+import { useUpdateCompany }  from '@/features/admin/lib/use-get-jobs';
+import { ApiSchema }         from '@/shared/types/schema';
 
 const EditCompanyPage = ({ params }: { params: Promise<{ id: string }> }) => {
     const { id } = use(params);

@@ -1,23 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ApiSchema } from '@/shared/types/schema';
-import { addCompanyToStorage } from '@/shared/lib/mock-data';
+import { Job } from '@/shared/types/schema';
 
-export const useCreateCompany = () => {
+export const useCreateJob = () => {
     const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: async (newCompany: Omit<ApiSchema.Company, 'id'>) => {
-            const companyWithId: ApiSchema.Company = {
-                ...newCompany,
-                id: Date.now().toString(), // Простая генерация ID
-            };
-            
-            addCompanyToStorage(companyWithId);
-            return companyWithId;
+    return useMutation<Job, Error, { title: string; description: string; location: string; slug: string; expireAt: string; companyId: string; tagIds?: string[] }>({
+        mutationFn: async (data) => {
+            const response = await fetch('/api/admin/jobs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+                },
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) throw new Error('Failed to create job');
+            return response.json();
         },
-        onSuccess: () => {
-            // Инвалидируем кеш компаний чтобы обновить данные
-            queryClient.invalidateQueries({ queryKey: ['companies'] });
+        onSuccess: (data) => {
+            queryClient.invalidateQueries(['jobs']);
         },
     });
 };

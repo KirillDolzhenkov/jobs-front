@@ -1,37 +1,25 @@
-'use client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Providers } from './providers';
 
-import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import theme from '@/shared/theme';
-import { createLocalStorageMiddleware } from '@/features/admin/lib/query-local-storage-middleware';
+const inter = Inter({ subsets: ['latin'] });
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: Infinity, // Данные считаются актуальными, пока не обновлены
-        },
-    },
-});
+export const metadata: Metadata = {
+  title: 'Job Platform',
+  description: 'A platform for discovering and managing tech jobs',
+};
 
-const withLocalStorage = createLocalStorageMiddleware(true); // Включено для имитации
-withLocalStorage(queryClient);
-
-const emotionCache = createCache({ key: 'mui' });
-
-export default function RootLayout({ children }: { children: ReactNode }) {
-    return (
-        <html lang="en">
-        <body>
-        <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-            </ThemeProvider>
-        </CacheProvider>
-        </body>
-        </html>
-    );
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+    <body className={inter.className}>
+    <Providers>{children}</Providers>
+    </body>
+    </html>
+  );
 }

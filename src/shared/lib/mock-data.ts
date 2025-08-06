@@ -1,3 +1,4 @@
+/*
 import { ApiSchema } from '@/shared/types/schema';
 
 export const mockCompanies: ApiSchema.Company[] = [
@@ -110,4 +111,4 @@ export const deleteCompanyFromStorage = (id: string): void => {
         const filteredCompanies = companies.filter(c => c.id !== id);
         localStorage.setItem('mockCompanies', JSON.stringify(filteredCompanies));
     }
-};
+};*/
