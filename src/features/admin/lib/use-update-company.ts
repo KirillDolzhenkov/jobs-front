@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Company } from '@/shared/types/schema';
+import { Company }                     from '@/shared/lib/types/schema';
 
 export const useUpdateCompany = (id: string) => {
   const queryClient = useQueryClient();

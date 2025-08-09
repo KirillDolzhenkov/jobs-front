@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Company } from '@/shared/types/schema';
+import { Company }  from '@/shared/lib/types/schema';
 
 export const useGetCompanyById = (id: string) => {
     return useQuery<Company>({

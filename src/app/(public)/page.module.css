@@ -1,3 +1,4 @@
+/*
 .main {
   background-color: #f7fafc;
   min-height: 100vh;
@@ -25,7 +26,7 @@
   margin-bottom: 16px;
 }
 
-/* Стили для кнопки через класс */
+!* Стили для кнопки через класс *!
 .postJobButton {
   background-color: #2d3748 !important;
   color: #ffffff !important;
@@ -38,3 +39,9 @@
   background-color: #1d2836 !important;
   box-shadow: none !important;
 }
+*/
+
+/*
+.main{
+  background-color: #C6EEF5;
+}*/

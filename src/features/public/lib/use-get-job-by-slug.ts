@@ -1,23 +1,8 @@
+import { Job }      from '@/shared/lib/types/schema';
 import { useQuery } from '@tanstack/react-query';
 
-interface JobViewDto {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  location: string;
-  salaryMin: number;
-  salaryMax: number;
-  isRemote: boolean;
-  postedAt: string;
-  expireAt: string;
-  companyId: string;
-  companyName: string;
-  applyUrl: string;
-}
-
 export const useGetJobBySlug = (slug: string) => {
-  return useQuery<JobViewDto, Error>({
+  return useQuery<Job, Error>({
     queryKey: ['publicJob', slug],
     queryFn: async () => {
       const response = await fetch(`/api/jobs/${slug}`, {

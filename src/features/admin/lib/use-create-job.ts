@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Job } from '@/shared/types/schema';
+import { Job }                         from '@/shared/lib/types/schema';
 
 export const useCreateJob = () => {
     const queryClient = useQueryClient();

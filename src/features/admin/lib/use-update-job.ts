@@ -7,6 +7,8 @@ interface UpdateJobData {
   slug: string;
   expireAt: string;
   companyId: string;
+  logoUrl?: string;
+  tagIds?: string[];
 }
 
 interface Job {
@@ -23,6 +25,8 @@ interface Job {
   companyId: string;
   companyName?: string;
   applyUrl?: string;
+  logoUrl?: string;
+  tagIds?: string[];
 }
 
 export const useUpdateJob = (id: string) => {
@@ -30,41 +34,31 @@ export const useUpdateJob = (id: string) => {
 
   return useMutation<Job, Error, UpdateJobData>({
     mutationFn: async (data) => {
-      console.log('Updating job - ID:', id, 'Full data:', JSON.stringify(data, null, 2));
-
       const formattedData = {
         ...data,
-        expireAt: new Date(data.expireAt).toISOString(), // Убеждаемся в формате ISO
+        expireAt: new Date(data.expireAt).toISOString(),
+        tagIds: data.tagIds ?? [],
       };
-
-      console.log('Formatted data sent:', JSON.stringify(formattedData, null, 2));
 
       const response = await fetch(`/api/admin/jobs/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=', // Проверь этот заголовок
+          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
         },
         body: JSON.stringify(formattedData),
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Попробуем получить JSON ошибки
-        console.error('Update failed - Status:', response.status, 'Error details:', errorData);
+        const errorData = await response.json();
         throw new Error(`Failed to update job: ${response.status} ${JSON.stringify(errorData)}`);
       }
 
-      const result = await response.json();
-      console.log('Update response:', result);
-      return result;
+      return await response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['job', id] });
-      console.log('Job updated successfully:', data);
-    },
-    onError: (error) => {
-      console.error('Update job error:', error.message);
     },
   });
 };

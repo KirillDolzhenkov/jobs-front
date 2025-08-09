@@ -8,7 +8,7 @@ export interface Company {
     updatedAt?: string;
 }
 
-export interface Job {
+interface Job {
     id: string;
     title: string;
     description: string;
@@ -16,12 +16,14 @@ export interface Job {
     location: string;
     salaryMin?: number;
     salaryMax?: number;
-    isRemote: boolean;
-    postedAt?: string;
-    expireAt?: string;
+    isRemote?: boolean;
+    postedAt: string;
+    expireAt: string;
     companyId: string;
-    companyName: string;
+    companyName?: string;
     applyUrl?: string;
+    logoUrl?: string;
+    tagIds?: string[];
 }
 
 export interface PaginatedResponse<T> {

@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { Company, PaginatedResponse } from '@/shared/types/schema';
+import { useQuery }                   from '@tanstack/react-query';
+import { Company, PaginatedResponse } from '@/shared/lib/types/schema';
 
 export const useGetCompanies = (page: number = 1, limit: number = 10) => {
     return useQuery<PaginatedResponse<Company>>({
