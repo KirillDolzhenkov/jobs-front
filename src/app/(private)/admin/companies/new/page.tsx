@@ -6,7 +6,7 @@ import { useRouter }                        from 'next/navigation';
 import { useState }                         from 'react';
 
 import { useCreateCompany } from '@/features/admin/lib/use-create-company';
-import CustomButton         from '@/shared/ui/CustomButton/CustomButton';
+import Button               from '@/shared/ui/Button/Button';
 
 const CompanyNewPage: NextPage = () => {
   const router        = useRouter();
@@ -80,10 +80,10 @@ const CompanyNewPage: NextPage = () => {
           fullWidth
           margin="normal"
         />
-        <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
           Save
-        </CustomButton>
-        <CustomButton
+        </Button>
+        <Button
           variant="outlined"
           onClick={() => router.push('/admin/companies')}
           sx={{
@@ -92,7 +92,7 @@ const CompanyNewPage: NextPage = () => {
           }}
         >
           Cancel
-        </CustomButton>
+        </Button>
       </form>
     </Container>
   );

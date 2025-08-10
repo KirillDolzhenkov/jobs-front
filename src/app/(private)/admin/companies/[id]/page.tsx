@@ -6,8 +6,8 @@ import { Container, Typography, TextField } from '@mui/material';
 
 import React                 from 'react';
 import { useGetCompanyById } from '@/features/admin/lib/use-get-company-by-id';
-import { useUpdateCompany }  from '@/features/admin/lib/use-update-company';
-import CustomButton          from '@/shared/ui/CustomButton/CustomButton';
+import { useUpdateCompany } from '@/features/admin/lib/use-update-company';
+import Button               from '@/shared/ui/Button/Button';
 
 const CompanyEditPage: NextPage = () => {
   const { id }        = useParams() as {id: string};
@@ -89,10 +89,10 @@ const CompanyEditPage: NextPage = () => {
             fullWidth
             margin="normal"
           />
-          <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
             Save
-          </CustomButton>
-          <CustomButton
+          </Button>
+          <Button
             variant="outlined"
             onClick={() => router.push('/admin/companies')}
             sx={{
@@ -101,7 +101,7 @@ const CompanyEditPage: NextPage = () => {
             }}
           >
             Cancel
-          </CustomButton>
+          </Button>
         </form>
       )}
     </Container>

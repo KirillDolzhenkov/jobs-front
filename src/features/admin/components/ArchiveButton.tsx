@@ -1,17 +1,17 @@
 'use client';
 
 import { useArchiveJob } from '@/features/admin/lib/use-archive-job';
-import CustomButton      from '@/shared/ui/CustomButton/CustomButton';
+import Button            from '@/shared/ui/Button/Button';
 import { ButtonProps }   from '@mui/material';
 
-interface ArchiveButtonProps {
+interface ArchiveButtonProps extends ButtonProps {
   jobId: string;
-  sx?: ButtonProps['sx'];
 }
+
 
 export const ArchiveButton = ({
   jobId,
-  sx,
+  ...props
 }: ArchiveButtonProps) => {
   const {
           mutate,
@@ -23,14 +23,14 @@ export const ArchiveButton = ({
   };
 
   return (
-    <CustomButton
-      sx={sx}
+    <Button
+      {...props}
       variant="contained"
       size="small"
       onClick={handleArchive}
       disabled={isPending}
     >
       {isPending ? 'Archiving...' : 'Archive'}
-    </CustomButton>
+    </Button>
   );
 };

@@ -17,7 +17,6 @@ import {
   Alert,
   Stack,
   Divider,
-  Button,
   IconButton,
   Tooltip,
   Fab,
@@ -48,9 +47,9 @@ import {
   CheckCircle as CheckCircleIcon,
   Schedule as ScheduleIcon,
   TrendingUp as TrendingUpIcon,
-} from '@mui/icons-material';
-import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { useGetJobBySlug } from '@/features/public/lib/use-get-job-by-slug';
+}                          from '@mui/icons-material';
+import Button              from '@/shared/ui/Button/Button';
+import { useGetJobBySlug } from '@/features/job-list/lib/use-get-job-by-slug';
 
 export default function JobDetailPage() {
   const theme = useTheme();
@@ -161,9 +160,9 @@ export default function JobDetailPage() {
             {error?.message || 'Job not found'}
           </Alert>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <CustomButton variant="outlined" startIcon={<ArrowBackIcon />}>
+            <Button variant="outlined" startIcon={<ArrowBackIcon />}>
               Back to Jobs
-            </CustomButton>
+            </Button>
           </Link>
         </Container>
       </Box>
@@ -531,7 +530,7 @@ export default function JobDetailPage() {
                 <Divider sx={{ my: 2 }} />
 
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                  <CustomButton
+                  <Button
                     variant="contained"
                     fullWidth
                     size="large"
@@ -542,7 +541,7 @@ export default function JobDetailPage() {
                     sx={{ mb: 1 }}
                   >
                     Apply Now
-                  </CustomButton>
+                  </Button>
 
                   <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
                     <Button
@@ -619,9 +618,9 @@ export default function JobDetailPage() {
         {/* Back to Jobs Button */}
         <Box sx={{ mt: 4, textAlign: 'center' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <CustomButton variant="outlined" startIcon={<ArrowBackIcon />} size="large">
+            <Button variant="outlined" startIcon={<ArrowBackIcon />} size="large">
               Back to All Jobs
-            </CustomButton>
+            </Button>
           </Link>
         </Box>
       </Container>

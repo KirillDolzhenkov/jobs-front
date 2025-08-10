@@ -9,7 +9,6 @@ import {
   Paper,
   Typography,
   TextField,
-  Button,
   FormControlLabel,
   Switch,
   Grid,
@@ -29,9 +28,9 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
   CalendarToday as CalendarIcon,
-} from '@mui/icons-material';
-import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { useGetJobBySlug } from '@/features/public/lib/use-get-job-by-slug';
+}                          from '@mui/icons-material';
+import Button              from '@/shared/ui/Button/Button';
+import { useGetJobBySlug } from '@/features/job-list/lib/use-get-job-by-slug';
 
 interface EditJobFormData {
   title: string;
@@ -152,9 +151,9 @@ export default function EditJobPage() {
           {error?.message || 'Job not found'}
         </Alert>
         <Link href="/admin/jobs">
-          <CustomButton variant="outlined" startIcon={<ArrowBackIcon />}>
+          <Button variant="outlined" startIcon={<ArrowBackIcon />}>
             Back to Jobs
-          </CustomButton>
+          </Button>
         </Link>
       </Container>
     );
@@ -164,13 +163,13 @@ export default function EditJobPage() {
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Box sx={{ mb: 3 }}>
         <Link href="/admin/jobs">
-          <CustomButton
+          <Button
             variant="outlined"
             startIcon={<ArrowBackIcon />}
             sx={{ mb: 2 }}
           >
             Back to Jobs
-          </CustomButton>
+          </Button>
         </Link>
         <Typography variant="h4" component="h1" gutterBottom>
           Edit Job
@@ -373,11 +372,11 @@ export default function EditJobPage() {
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 3 }}>
                 <Link href="/admin/jobs">
-                  <CustomButton variant="outlined" disabled={isSubmitting}>
+                  <Button variant="outlined" disabled={isSubmitting}>
                     Cancel
-                  </CustomButton>
+                  </Button>
                 </Link>
-                <CustomButton
+                <Button
                   type="submit"
                   variant="contained"
                   startIcon={isSubmitting ? <CircularProgress size={20} /> : <SaveIcon />}
@@ -385,7 +384,7 @@ export default function EditJobPage() {
                   sx={{ minWidth: 120 }}
                 >
                   {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </CustomButton>
+                </Button>
               </Box>
             </Grid>
           </Grid>

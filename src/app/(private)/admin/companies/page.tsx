@@ -42,8 +42,8 @@ import {
   Email as EmailIcon,
   Phone as PhoneIcon,
   TrendingUp as TrendingIcon,
-} from '@mui/icons-material';
-import CustomButton from '@/shared/ui/CustomButton/CustomButton';
+}                          from '@mui/icons-material';
+import Button              from '@/shared/ui/Button/Button';
 import { useGetCompanies } from '@/features/admin/lib/use-get-companies';
 
 interface Company {
@@ -163,12 +163,12 @@ const CompaniesPage = () => {
         <Alert severity="error" sx={{ mb: 3 }}>
           Error loading companies: {error.message}
         </Alert>
-        <CustomButton
+        <Button
           variant="outlined"
           onClick={() => window.location.reload()}
         >
           Retry
-        </CustomButton>
+        </Button>
       </Container>
     );
   }
@@ -186,7 +186,7 @@ const CompaniesPage = () => {
               Manage company profiles, information, and job postings
             </Typography>
           </Box>
-          <CustomButton
+          <Button
             variant="contained"
             size="large"
             startIcon={<AddIcon />}
@@ -200,7 +200,7 @@ const CompaniesPage = () => {
             }}
           >
             Add New Company
-          </CustomButton>
+          </Button>
         </Box>
       </Paper>
 
@@ -275,13 +275,13 @@ const CompaniesPage = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             {searchTerm ? 'Try adjusting your search terms' : 'Create your first company profile to get started'}
           </Typography>
-          <CustomButton
+          <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => router.push('/admin/companies/new')}
           >
             Add New Company
-          </CustomButton>
+          </Button>
         </Paper>
       ) : (
         <>
@@ -464,7 +464,7 @@ const CompaniesPage = () => {
                     {/* Actions */}
                     <Box sx={{ p: 2, pt: 1.5 }}>
                       <Stack direction="row" spacing={1} justifyContent="space-between">
-                        <CustomButton
+                        <Button
                           variant="outlined"
                           size="small"
                           startIcon={<EditIcon />}
@@ -472,15 +472,15 @@ const CompaniesPage = () => {
                           sx={{ flexGrow: 1 }}
                         >
                           Edit
-                        </CustomButton>
-                        <CustomButton
+                        </Button>
+                        <Button
                           variant="contained"
                           size="small"
                           startIcon={<VisibilityIcon />}
                           onClick={() => router.push(`/companies/${company.slug}`)}
                         >
                           View
-                        </CustomButton>
+                        </Button>
                       </Stack>
                     </Box>
                   </Card>

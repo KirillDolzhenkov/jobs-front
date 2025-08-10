@@ -1,7 +1,7 @@
 'use client';
 
-import CustomButton                                   from '@/shared/ui/CustomButton/CustomButton';
-import { NextPage }                                   from 'next';
+import Button       from '@/shared/ui/Button/Button';
+import { NextPage } from 'next';
 import { useRouter }                                  from 'next/navigation';
 import { useState, useEffect }                        from 'react';
 import { Container, Typography, TextField, MenuItem } from '@mui/material';
@@ -144,10 +144,10 @@ const JobNewPage: NextPage = () => {
             </MenuItem>
           ))}
         </TextField>
-        <CustomButton type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
           Save
-        </CustomButton>
-        <CustomButton
+        </Button>
+        <Button
           variant="outlined"
           onClick={() => router.push('/admin/jobs')}
           sx={{
@@ -156,7 +156,7 @@ const JobNewPage: NextPage = () => {
           }}
         >
           Cancel
-        </CustomButton>
+        </Button>
       </form>
     </Container>
   );

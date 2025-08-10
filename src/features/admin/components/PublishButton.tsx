@@ -1,17 +1,17 @@
 'use client';
 
 import { usePublishJob } from '@/features/admin/lib/use-publish-job';
-import CustomButton      from '@/shared/ui/CustomButton/CustomButton';
+import Button            from '@/shared/ui/Button/Button';
 import { ButtonProps }   from '@mui/material';
 
-interface PublishButtonProps {
+interface PublishButtonProps extends ButtonProps {
   jobId: string;
-  sx?: ButtonProps['sx'];
 }
+
 
 export const PublishButton = ({
   jobId,
-  sx,
+  ...props
 }: PublishButtonProps) => {
   const {
           mutate,
@@ -23,14 +23,14 @@ export const PublishButton = ({
   };
 
   return (
-    <CustomButton
-      sx={sx}
+    <Button
+      {...props}
       variant="contained"
       size="small"
       onClick={handlePublish}
       disabled={isPending}
     >
       {isPending ? 'Publishing...' : 'Publish'}
-    </CustomButton>
+    </Button>
   );
 };

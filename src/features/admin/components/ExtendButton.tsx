@@ -1,17 +1,16 @@
 'use client';
 
 import { useExtendJob } from '@/features/admin/lib/use-extend-job';
-import CustomButton     from '@/shared/ui/CustomButton/CustomButton';
+import Button           from '@/shared/ui/Button/Button';
 import { ButtonProps }  from '@mui/material';
 
-interface ExtendButtonProps {
+interface ExtendButtonProps extends ButtonProps {
   jobId: string;
-  sx?: ButtonProps['sx'];
 }
 
 export const ExtendButton = ({
   jobId,
-  sx,
+  ...props
 }: ExtendButtonProps) => {
   const {
           mutate,
@@ -23,14 +22,14 @@ export const ExtendButton = ({
   };
 
   return (
-    <CustomButton
-      sx={sx}
+    <Button
+      {...props}
       variant="contained"
       size="small"
       onClick={handleExtend}
       disabled={isPending}
     >
       {isPending ? 'Extending...' : 'Extend'}
-    </CustomButton>
+    </Button>
   );
 };

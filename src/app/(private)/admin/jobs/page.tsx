@@ -22,8 +22,11 @@ import {
   Stack,
   Divider,
   Tooltip,
-  Badge,
-}                          from '@mui/material';
+  Badge, Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import {
   Add as AddIcon,
   Search as SearchIcon,
@@ -33,12 +36,14 @@ import {
   AttachMoney as MoneyIcon,
   CalendarToday as CalendarIcon,
   AccessTime as TimeIcon,
+  Visibility as VisibilityIcon,
+  Delete as DeleteIcon,
   Link as LinkIcon,
-
+  MoreVert as MoreVertIcon,
   Work as WorkIcon,
-}                          from '@mui/icons-material';
-import CustomButton        from '@/shared/ui/CustomButton/CustomButton';
-import { useGetJobs }      from '@/features/admin/lib/use-get-jobs';
+}                     from '@mui/icons-material';
+import Button         from '@/shared/ui/Button/Button';
+import { useGetJobs } from '@/features/admin/lib/use-get-jobs';
 import { PublishButton }   from '@/features/admin/components/PublishButton';
 import { ArchiveButton }   from '@/features/admin/components/ArchiveButton';
 import { ExtendButton }    from '@/features/admin/components/ExtendButton';
@@ -48,6 +53,9 @@ const JobsPage = () => {
   const [page, setPage]             = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const limit                       = 12;
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedJob, setSelectedJob] = useState<Company | null>(null);
 
   const {
           data,
@@ -61,6 +69,16 @@ const JobsPage = () => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, company: Company) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedJob(company);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedJob(null);
   };
 
   const formatSalary = (min?: number, max?: number) => {
@@ -167,12 +185,12 @@ const JobsPage = () => {
         <Alert severity="error" sx={{ mb: 3 }}>
           Error loading jobs: {error.message}
         </Alert>
-        <CustomButton
+        <Button
           variant="outlined"
           onClick={() => window.location.reload()}
         >
           Retry
-        </CustomButton>
+        </Button>
       </Container>
     );
   }
@@ -219,7 +237,7 @@ const JobsPage = () => {
               Manage your job postings, track performance, and update listings
             </Typography>
           </Box>
-          <CustomButton
+          <Button
             variant="contained"
             size="large"
             startIcon={<AddIcon />}
@@ -228,12 +246,12 @@ const JobsPage = () => {
               bgcolor:   'white',
               color:     '#667eea',
               '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(189,23,23,0.9)',
               },
             }}
           >
             Create New Job
-          </CustomButton>
+          </Button>
         </Box>
       </Paper>
 
@@ -348,13 +366,13 @@ const JobsPage = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             {searchTerm ? 'Try adjusting your search terms' : 'Create your first job posting to get started'}
           </Typography>
-          <CustomButton
+          <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => router.push('/admin/jobs/new')}
           >
             Create New Job
-          </CustomButton>
+          </Button>
         </Paper>
       ) : (
         <>
@@ -422,7 +440,14 @@ const JobsPage = () => {
                         <Typography variant="body2" color="text.secondary" noWrap>
                           {job.companyName || 'Company not specified'}
                         </Typography>
+
                       </Box>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleMenuOpen(e, job)}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
                     </Box>
 
                     {/* Location and Remote Badge */}
@@ -512,7 +537,7 @@ const JobsPage = () => {
                     }}
                   >
                     <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                      <Link href={`/admin/jobs/${job.slug}`} style={{ textDecoration: 'none' }}>
+                     {/*  <Link href={`/admin/jobs/${job.slug}`} style={{ textDecoration: 'none' }}>
                         <Tooltip title="Edit Job">
                           <IconButton
                             size="small"
@@ -525,7 +550,7 @@ const JobsPage = () => {
                             <EditIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                      </Link>
+                      </Link> */}
                       {job.applyUrl && (
                         <Tooltip title="View Application Link">
                           <IconButton
@@ -551,11 +576,49 @@ const JobsPage = () => {
                       <ArchiveButton jobId={job.id} size="small" />
                       <ExtendButton jobId={job.id} size="small" />
                     </Stack>
+
                   </Box>
                 </Card>
               </Grid>
             ))}
           </Grid>
+
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={() => {
+              if (selectedJob) {
+                router.push(`/admin/jobs/${selectedJob.slug}`);
+              }
+              handleMenuClose();
+            }}>
+              <ListItemIcon>
+                <EditIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Edit Job</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => {
+              if (selectedJob) {
+                /* router.push(`/jobs/${selectedJob.slug}`); */
+                router.push(`/${selectedJob.slug}`);
+              }
+              handleMenuClose();
+            }}>
+              <ListItemIcon>
+                <VisibilityIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>View Public Profile</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" color="error" />
+              </ListItemIcon>
+              <ListItemText>Delete Job</ListItemText>
+            </MenuItem>
+          </Menu>
 
           {/* Pagination */}
           {totalPages > 1 && (
