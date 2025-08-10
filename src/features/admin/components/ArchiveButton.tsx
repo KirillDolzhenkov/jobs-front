@@ -25,8 +25,6 @@ export const ArchiveButton = ({
   return (
     <Button
       {...props}
-      variant="contained"
-      size="small"
       onClick={handleArchive}
       disabled={isPending}
     >

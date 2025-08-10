@@ -6,17 +6,17 @@ import { Container, Typography, TextField } from '@mui/material';
 
 import React                 from 'react';
 import { useGetCompanyById } from '@/features/admin/lib/use-get-company-by-id';
-import { useUpdateCompany } from '@/features/admin/lib/use-update-company';
-import Button               from '@/shared/ui/Button/Button';
+import { useUpdateCompany }  from '@/features/admin/lib/use-update-company';
+import Button                from '@/shared/ui/Button/Button';
 
 const CompanyEditPage: NextPage = () => {
-  const { id }        = useParams() as {id: string};
+  const { slug }        = useParams() as {slug: string};
   const router        = useRouter();
   const {
           data: company,
           isLoading,
           error,
-        }             = useGetCompanyById(id);
+        }             = useGetCompanyById(slug);
   const updateCompany = useUpdateCompany(company?.id);
 
   if (isLoading) {

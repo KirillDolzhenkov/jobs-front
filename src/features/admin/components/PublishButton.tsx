@@ -25,8 +25,6 @@ export const PublishButton = ({
   return (
     <Button
       {...props}
-      variant="contained"
-      size="small"
       onClick={handlePublish}
       disabled={isPending}
     >

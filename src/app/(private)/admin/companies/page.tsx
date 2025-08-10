@@ -465,22 +465,29 @@ const CompaniesPage = () => {
                     <Box sx={{ p: 2, pt: 1.5 }}>
                       <Stack direction="row" spacing={1} justifyContent="space-between">
                         <Button
+                         variant="outlined"
+                         size="small"
+                         sx={{ flexGrow: 1 }}
+                         >
+                          View
+                         </Button>
+                        {/* <Button
                           variant="outlined"
                           size="small"
                           startIcon={<EditIcon />}
-                          onClick={() => router.push(`/admin/companies/${company.slug}`)}
+                          onClick={() => router.push(`/admin/companies/edit/${company.slug}`)}
                           sx={{ flexGrow: 1 }}
                         >
                           Edit
-                        </Button>
-                        <Button
+                        </Button> */}
+                        {/* <Button
                           variant="contained"
                           size="small"
                           startIcon={<VisibilityIcon />}
                           onClick={() => router.push(`/companies/${company.slug}`)}
                         >
                           View
-                        </Button>
+                        </Button> */}
                       </Stack>
                     </Box>
                   </Card>
@@ -497,7 +504,7 @@ const CompaniesPage = () => {
           >
             <MenuItem onClick={() => {
               if (selectedCompany) {
-                router.push(`/admin/companies/${selectedCompany.slug}`);
+                router.push(`/admin/companies/edit/${selectedCompany.slug}`);
               }
               handleMenuClose();
             }}>
@@ -506,7 +513,7 @@ const CompaniesPage = () => {
               </ListItemIcon>
               <ListItemText>Edit Company</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => {
+            {/* <MenuItem onClick={() => {
               if (selectedCompany) {
                 router.push(`/companies/${selectedCompany.slug}`);
               }
@@ -516,7 +523,7 @@ const CompaniesPage = () => {
                 <VisibilityIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>View Public Profile</ListItemText>
-            </MenuItem>
+            </MenuItem> */}
             <Divider />
             <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
               <ListItemIcon>

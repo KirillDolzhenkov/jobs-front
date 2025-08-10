@@ -571,8 +571,19 @@ const JobsPage = () => {
                       )}
                     </Stack>
 
+
+
                     <Stack direction="row" spacing={1} justifyContent="flex-start">
-                      <PublishButton jobId={job.id} size="small" />
+                      {/* <Button */}
+                      {/*   variant="outlined" */}
+                      {/*   size="small" */}
+                      {/*   startIcon={<VisibilityIcon />} */}
+                      {/*   onClick={() => router.push(`/admin/companies/edit/${company.slug}`)} */}
+                      {/*   sx={{ flexGrow: 1 }} */}
+                      {/* > */}
+                      {/*   View */}
+                      {/* </Button> */}
+                      <PublishButton jobId={job.id} size="small" variant="outlined" fullWidth />
                       <ArchiveButton jobId={job.id} size="small" />
                       <ExtendButton jobId={job.id} size="small" />
                     </Stack>
@@ -590,7 +601,7 @@ const JobsPage = () => {
           >
             <MenuItem onClick={() => {
               if (selectedJob) {
-                router.push(`/admin/jobs/${selectedJob.slug}`);
+                router.push(`/admin/jobs/edit/${selectedJob.slug}`);
               }
               handleMenuClose();
             }}>

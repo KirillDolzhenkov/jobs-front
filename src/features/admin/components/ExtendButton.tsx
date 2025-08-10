@@ -24,8 +24,6 @@ export const ExtendButton = ({
   return (
     <Button
       {...props}
-      variant="contained"
-      size="small"
       onClick={handleExtend}
       disabled={isPending}
     >
