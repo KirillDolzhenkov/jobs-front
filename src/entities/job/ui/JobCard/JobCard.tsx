@@ -50,9 +50,9 @@ const JobCard: React.FC<JobCardProps> = ({
         cursor:         'pointer',
         '&:hover':      {
           transform:         'translateY(-2px)',
-          boxShadow:         theme.shadows[8],
-          '& .job-arrow':    { transform: 'translateX(4px)' },
-          '& .company-logo': { transform: 'scale(1.05)' },
+          /* boxShadow:         theme.shadows[8], */
+          /* '& .job-arrow':    { transform: 'translateX(4px)' }, */
+          /* '& .company-logo': { transform: 'scale(1.05)' }, */
         },
       }}
     >

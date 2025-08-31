@@ -1,19 +1,21 @@
 'use client';
 
-import React                              from 'react';
-import { useRouter }                      from 'next/navigation';
-import { Paper, Box, Typography, Button } from '@mui/material';
-import { Add as AddIcon }                 from '@mui/icons-material';
+import CustomButton                                 from '@/shared/ui/Button';
+import React                                        from 'react';
+import { useRouter }                                from 'next/navigation';
+import { Paper, Box, Typography, Button, useTheme } from '@mui/material';
+import { Add as AddIcon }                           from '@mui/icons-material';
 
 const AdminJobsHeader = () => {
   const router = useRouter();
+  const theme  = useTheme();
   return (
     <Paper
       elevation={1}
       sx={{
         p:          3,
         mb:         4,
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.primary.main} 100%)`,
       }}
     >
       <Box
@@ -43,7 +45,7 @@ const AdminJobsHeader = () => {
             }}
           >Manage your job postings, track performance, and update listings</Typography>
         </Box>
-        <Button
+        <CustomButton
           variant="contained"
           size="large"
           startIcon={<AddIcon />}
@@ -55,7 +57,7 @@ const AdminJobsHeader = () => {
            }} */
         >
           Create New Job
-        </Button>
+        </CustomButton>
       </Box>
     </Paper>
   );
