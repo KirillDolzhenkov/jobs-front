@@ -4,22 +4,24 @@ export const usePublishJob = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async() => {
       const response = await fetch(`/api/admin/jobs/${id}/publish`, {
-        method: 'POST',
+        method:  'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+          Authorization:  'Basic YWRtaW46cGFzc3dvcmQ=',
         },
       });
-      if (!response.ok) throw new Error('Failed to publish job');
+      if (!response.ok) {
+        throw new Error('Failed to publish job');
+      }
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['jobs']);
-      queryClient.invalidateQueries(['job', id]);
+    onSuccess:  () => {
+      void queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      void queryClient.invalidateQueries({ queryKey: ['job', id] });
     },
-    onError: (error) => {
+    onError:    (error) => {
       console.error('Publish failed:', error);
     },
   });

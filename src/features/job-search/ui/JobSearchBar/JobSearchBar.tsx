@@ -31,7 +31,7 @@ const JobSearchBar: React.FC<JobSearchBarProps> = ({
         value={searchTerm}
         onChange={onSearchChange}
         variant="outlined"
-        size="large"
+        size="medium"
         InputProps={{
           startAdornment: (
                             <InputAdornment position="start">

@@ -4,21 +4,23 @@ import { Company }                     from '@/shared/lib/types/schema';
 export const useCreateCompany = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<Company, Error, { name: string; description?: string; logoUrl?: string }>({
-    mutationFn: async (data) => {
+  return useMutation<Company, Error, {name: string; description?: string; logoUrl?: string}>({
+    mutationFn: async(data) => {
       const response = await fetch('/api/admin/companies', {
-        method: 'POST',
+        method:  'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+          Authorization:  'Basic YWRtaW46cGFzc3dvcmQ=',
         },
-        body: JSON.stringify(data),
+        body:    JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to create company');
+      if (!response.ok) {
+        throw new Error('Failed to create company');
+      }
       return response.json();
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['companies']);
+    onSuccess:  (data) => {
+      void queryClient.invalidateQueries({ queryKey: ['companies'] });
     },
   });
 };

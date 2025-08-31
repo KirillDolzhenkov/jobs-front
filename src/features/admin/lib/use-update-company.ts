@@ -4,22 +4,24 @@ import { Company }                     from '@/shared/lib/types/schema';
 export const useUpdateCompany = (id: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Company, Error, { name: string; description?: string; logoUrl?: string }>({
-    mutationFn: async (data) => {
+  return useMutation<Company, Error, {name: string; description?: string; logoUrl?: string}>({
+    mutationFn: async(data) => {
       const response = await fetch(`/api/admin/companies/${id}`, {
-        method: 'PUT',
+        method:  'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+          Authorization:  'Basic YWRtaW46cGFzc3dvcmQ=',
         },
-        body: JSON.stringify(data),
+        body:    JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to update company');
+      if (!response.ok) {
+        throw new Error('Failed to update company');
+      }
       return response.json();
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(['companies']);
-      queryClient.invalidateQueries(['company', id]);
+    onSuccess:  (data) => {
+      void queryClient.invalidateQueries({ queryKey: ['companies'] });
+      void queryClient.invalidateQueries({ queryKey: ['company', id] });
     },
   });
 };

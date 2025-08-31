@@ -33,20 +33,20 @@ export const useUpdateJob = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation<Job, Error, UpdateJobData>({
-    mutationFn: async (data) => {
+    mutationFn: async(data) => {
       const formattedData = {
         ...data,
         expireAt: new Date(data.expireAt).toISOString(),
-        tagIds: data.tagIds ?? [],
+        tagIds:   data.tagIds ?? [],
       };
 
       const response = await fetch(`/api/admin/jobs/${id}`, {
-        method: 'PUT',
+        method:  'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+          Authorization:  'Basic YWRtaW46cGFzc3dvcmQ=',
         },
-        body: JSON.stringify(formattedData),
+        body:    JSON.stringify(formattedData),
       });
 
       if (!response.ok) {
@@ -56,9 +56,9 @@ export const useUpdateJob = (id: string) => {
 
       return await response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      queryClient.invalidateQueries({ queryKey: ['job', id] });
+    onSuccess:  () => {
+      void queryClient.invalidateQueries({ queryKey: ['jobs'] });
+      void queryClient.invalidateQueries({ queryKey: ['job', id] });
     },
   });
 };

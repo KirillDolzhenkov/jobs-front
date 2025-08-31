@@ -1,15 +1,17 @@
+/*
 'use client';
 
-import JobCard from '@/entities/job/ui/JobCard/JobCard';
+import JobCard                                                     from '@/entities/job/ui/JobCard/JobCard';
 import JobSearchBar
-               from '@/features/job-search/ui/JobSearchBar/JobSearchBar';
-import { Job }             from '@/shared/lib/types/schema';
+                                                                   from '@/features/job-search/ui/JobSearchBar/JobSearchBar';
+import { Job }                                                     from '@/shared/lib/types/schema';
 import JobListSkeleton
-                           from '@/widgets/jobs-list/ui/JobListSkeleton';
-import NoJobsFound         from '@/widgets/jobs-list/ui/NoJobsFound';
+                                                                   from '@/widgets/jobs-list/ui/JobListSkeleton/JobListSkeleton';
+import NoJobsFound
+                                                                   from '@/widgets/jobs-list/ui/NoJobsFound/NoJobsFound';
 import ResultsHeader
-                           from '@/widgets/jobs-list/ui/ResultsHeader';
-import React, { useState } from 'react';
+                                                                   from '@/widgets/jobs-list/ui/ResultsHeader/ResultsHeader';
+import React, { useState }                                         from 'react';
 import { Container, Grid, Box, Alert, Pagination, Fade, useTheme } from '@mui/material';
 import { useGetJobs }                                              from '@/features/admin/lib/use-get-jobs';
 
@@ -23,7 +25,7 @@ const JobList = () => {
           data,
           isLoading,
           error,
-        } = useGetJobs(page, limit) /* as {data?: JobsResponse; isLoading: boolean; error?: Error} */;
+        } = useGetJobs(page, limit) /!* as {data?: JobsResponse; isLoading: boolean; error?: Error} *!/;
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -100,4 +102,4 @@ const JobList = () => {
   );
 };
 
-export default JobList;
+export default JobList;*/
